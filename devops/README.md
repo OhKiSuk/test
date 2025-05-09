@@ -2,7 +2,7 @@
 
 ### Table of Contents
 #### [k8s-workshop](#k8s-workshop)
-##### [DevOps](#DevOps)
+  ##### [DevOps](#DevOps)
   - [1. 소개](#1-소개)
   - [2. 환경 준비](#2-환경-준비)
   - [3. 설치](#3-설치)
@@ -33,14 +33,13 @@
 
 ----
 #### 2. 환경 준비
-```markdown
-**(2025.05.09) 하드웨어 사양**
-
+```text
+[(2025.05.09) 하드웨어 사양]
 CPU: 4Core 8Thread
 RAM: 16GB
 SSD: 512GB
 
-**(2025.05.09) 환경 구성 시 필요한 소프트웨어 목록**
+[(2025.05.09) 환경 구성 시 필요한 소프트웨어 목록]
 - VirtualBox
 - Vagrant
 - Putty or MobaXTerm(for Windows)
@@ -60,8 +59,7 @@ git clone https://github.com/oscka/k8s-workshop.git
 ```
 ###### Agent-Ansible1(VM1)
 - Ansible 코드를 받아 Target 서버에 설치를 수행한다.
-```markdown
-- 파일 위치: vagrant\vbox\ansible1\Vagrant
+- 파일 위치: [vagrant\vbox\ansible1\Vagrant](https://raw.githubusercontent.com/oscka/k8s-workshop/main/vagrant/vbox/ansible1/Vagrantfile)
 - 권장 사양: 
 	- CPU: 4Core
 	- RAM: 4GB
@@ -72,11 +70,10 @@ git clone https://github.com/oscka/k8s-workshop.git
 - 계정 정보
 	- ID: vagrant
 	- Password: vagrant
-```
+
 ###### Target-Ansible2(VM2)
 - Jenkins 및 k3s 기반 클러스터. sample-api가 실행된다.
-```markdown
-- 파일 위치: vagrant\vbox\ansible2\Vagrant
+- 파일 위치: [vagrant\vbox\ansible2\Vagrant](https://raw.githubusercontent.com/oscka/k8s-workshop/main/vagrant/vbox/ansible2/Vagrantfile)
 - 권장 사양: 
 	- CPU: 8Core
 	- RAM: 8GB
@@ -87,7 +84,7 @@ git clone https://github.com/oscka/k8s-workshop.git
 - 계정 정보
 	- ID: vagrant
 	- Password: vagrant
-```
+
 ##### 2-2. Vagrant 파일 생성 및 수정 후 Vagrant로 VM을 생성
 - 각각의 Vagrantfile 위치에서 실행한다.
 ```shell
@@ -221,7 +218,7 @@ def opsBranch = "main"
 /////////////////////////////
 pipeline {
     environment {
-		 PATH = "$PATH:/usr/local/bin/"  //maven, skaffold, argocd,jq path
+		  PATH = "$PATH:/usr/local/bin/"  //maven, skaffold, argocd,jq path
     }
     agent any
     stages {
@@ -250,22 +247,22 @@ pipeline {
 
         stage('GitOps update') {
             steps {
-	            print "======kustomization.yaml tag update====="
-	            withCredentials([
-		            gitUsernamePassword(credentialsId: 'git-credential', gitToolName: 'Default')
-                    ]) {
-                        sh """
-                        git clone ${gitOpsUrl}
-                        cd ./sample-gitops/sample-api/rolling-update-no-istio
-                        kustomize edit set image {{DockerHub Username}}/sample-api:${TAG}
-                        # 로컬외에는 주석 제거한다
-                        git config --global user.email "admin@demo.com"
-                        git config --global user.name "admin"
-                        git add .
-                        git commit -am 'update image tag ${TAG}'
-                        git remote set-url --push origin ${gitOpsUrl}
-                        git push origin ${opsBranch}
-                        """
+	              print "======kustomization.yaml tag update====="
+	              withCredentials([
+                  gitUsernamePassword(credentialsId: 'git-credential', gitToolName: 'Default')
+                ]) {
+                  sh """
+                  git clone ${gitOpsUrl}
+                  cd ./sample-gitops/sample-api/rolling-update-no-istio
+                  kustomize edit set image {{DockerHub Username}}/sample-api:${TAG}
+                  # 로컬외에는 주석 제거한다
+                  git config --global user.email "admin@demo.com"
+                  git config --global user.name "admin"
+                  git add .
+                  git commit -am 'update image tag ${TAG}'
+                  git remote set-url --push origin ${gitOpsUrl}
+                  git push origin ${opsBranch}
+                  """
                     }
                     print "git push finished !!!"
 
@@ -396,7 +393,7 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 """
 4. credentials 생성
-	4-1. Jenkins 관리 > Credentials()
+	4-1. Jenkins 관리 > Credentials
 		- git-credential
 			- Kind: Username and Password
 			- Scope: Global
