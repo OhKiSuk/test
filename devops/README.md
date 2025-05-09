@@ -212,7 +212,7 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5BA31D57EF5975CA
 fork된 Repository 내에서 환경 구성에 필요한 소스 코드 및 파일을 다음과 같이 수정한다.
 ###### sample-api(파일 수정 후 Tag 0.0.1로 Release)
 1. Jenkinsfile
-```yaml
+```groovy
 def PROJECT_NAME = "sample-api"
 def gitUrl = "https://github.com/{{Github Username}}/${PROJECT_NAME}.git"
 def gitOpsUrl = "https://github.com/{{Github Username}}/sample-gitops.git"
