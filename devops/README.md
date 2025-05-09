@@ -175,7 +175,9 @@ sudo ./run-play.sh "tool-basic, helm-repo, k3s, ingress-nginx, jenkins, docker, 
 	- 원격 저장소가 Jenkins의 job 트리거 조건(webhook, push 등)을 만족 시 소스코드를 받아 빌드, dockerizing하고 docker hub에 push한다.
 - 빨간색 흐름 - CD(배포)
 	- Argocd가 Gitops에 변경된 버전을 확인하여 정의된 배포 전략에 따라 배포를 수행한다.
+
 ![[201487394-ebf3a507-aa51-4cb1-87e3-08b283a868fe.png]]
+
 ##### 참고 사항
 ###### Jenkins 구성 관련
 - Jenkins의 경우 job 실행 속도 문제로 클러스터 밖의 환경에 별도로 설치하는 방법을 기준으로 한다.
