@@ -176,7 +176,7 @@ sudo ./run-play.sh "tool-basic, helm-repo, k3s, ingress-nginx, jenkins, docker, 
 - 빨간색 흐름 - CD(배포)
 	- Argocd가 Gitops에 변경된 버전을 확인하여 정의된 배포 전략에 따라 배포를 수행한다.
 
-![[201487394-ebf3a507-aa51-4cb1-87e3-08b283a868fe.png]]
+![201487394-ebf3a507-aa51-4cb1-87e3-08b283a868fe.png](https://user-images.githubusercontent.com/112376183/201487394-ebf3a507-aa51-4cb1-87e3-08b283a868fe.png)
 
 ##### 참고 사항
 ###### Jenkins 구성 관련
