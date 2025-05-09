@@ -317,7 +317,7 @@ logging:
     com.example.sampleapi: info 
 ```
 3. /src/main/resources/config/application.yml
-```
+```yml
 spring:
   application:
     name: sample-api
@@ -326,7 +326,7 @@ spring:
 ```
 ###### sample-gitops(파일 수정 후 Tag 0.0.1로 Release)
 1. sample-api/rolling-update-no-istio/sample-api-deployment.yaml
-```
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -378,62 +378,61 @@ sudo service docker restart
 
 """
 2. 계정 생성 및 비밀번호 변경
-	- Jenkins의 초기 관리자 비밀번호를 확인
+  - Jenkins의 초기 관리자 비밀번호를 확인
 """
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 """
 3. 로그인 후 플러그인 설치
-	- Git Parameter, Workspace Cleanup, Docker Pipeline
-	- Docker Pipeline의 경우 초기 설정 시 선택할 수 없으므로 초기 설정 이후 Jenkins 관리 메뉴에서 설치할 것
-	- 플러그인 설치가 안될 경우 Jenkins 서비스를 재시작한 후, 다시 시도
-	- 계정 정보
-		- ID: admin
-		- Password: admin1234
+  - Git Parameter, Workspace Cleanup, Docker Pipeline
+  - Docker Pipeline의 경우 초기 설정 시 선택할 수 없으므로 초기 설정 이후 Jenkins 관리 메뉴에서 설치할 것
+  - 플러그인 설치가 안될 경우 Jenkins 서비스를 재시작한 후, 다시 시도
+  - 계정 정보
+    - ID: admin
+    - Password: admin1234
 """
 # sudo systemctl restart jenkins
 
 """
 4. credentials 생성
-	4-1. Jenkins 관리 > Credentials
-		- git-credential
-			- Kind: Username and Password
-			- Scope: Global
-			- Username: Github Username
-			- Password: AccessToken(classic token, repo 권한 부여)
-			- ID: git-credential
-			- Description: git-credential
-		- imageRegistry-credential
-			- Kind: Username and Password
-			- Scope: Global
-			- Username: DockerHub Username
-			- Password: DockerHub Password or Personal AccessToken
-			- ID: imageRegistry-credential
-			- Description: imageRegistry-credential
+  4-1. Jenkins 관리 > Credentials
+    - git-credential
+      - Kind: Username and Password
+      - Scope: Global
+      - Username: Github Username
+      - Password: AccessToken(classic token, repo 권한 부여)
+      - ID: git-credential
+      - Description: git-credential
+    - imageRegistry-credential
+      - Kind: Username and Password
+      - Scope: Global
+      - Username: DockerHub Username
+      - Password: DockerHub Password or Personal AccessToken
+      - ID: imageRegistry-credential
+      - Description: imageRegistry-credential
 """
 
 """
 5. job 생성
-	5-1. Dashboard > 새로운 Item
-		- item name: sample-api-build
-		- item type: pipeline
-	5-2. Configure > '이 빌드는 매개변수가 있습니다.' 선택
-	5-3. 매개변수 추가 > 'Git Parameter' 선택
-	5-4. Git Parameter 설정
-		- Name: TAG
-		- Description: TAG(or default)
-		- Default Value: 0.0.1(or default TAG Version)
-	5-5. Pipeline > 'Pipeline Script from SCM' 선택
-		- Credentials > 'git-credential' 선택
-		- Branch to build > Branch Specifier (blank for 'any') > 본인 branch 이름(EX. */develop)
-		- Pipeline Script > Jenkinsfile
-#      
+  5-1. Dashboard > 새로운 Item
+    - item name: sample-api-build
+    - item type: pipeline
+  5-2. Configure > '이 빌드는 매개변수가 있습니다.' 선택
+  5-3. 매개변수 추가 > 'Git Parameter' 선택
+  5-4. Git Parameter 설정
+    - Name: TAG
+    - Description: TAG(or default)
+    - Default Value: 0.0.1(or default TAG Version)
+  5-5. Pipeline > 'Pipeline Script from SCM' 선택
+    - Credentials > 'git-credential' 선택
+    - Branch to build > Branch Specifier (blank for 'any') > 본인 branch 이름(EX. */develop)
+    - Pipeline Script > Jenkinsfile  
 """
 
 """
 6. 빌드 도구 설치
-	- skaffold, kustomize 설치(Agent에서 명령 실행)
-	- jenkins 계정에서 docker 실행이 가능해야 한다.
+  - skaffold, kustomize 설치(Agent에서 명령 실행)
+  - jenkins 계정에서 docker 실행이 가능해야 한다.
 """
 sudo ./run-play.sh "skaffold, kustomize"
 ```
@@ -446,37 +445,37 @@ sudo ./run-play.sh "skaffold, kustomize"
 ```shell
 """
 1. Argocd에 로그인하여 Settings > Repository 메뉴에서 새로운 Repository를 등록(Connect Repo)한다.
-	- 접속 주소
-		- https://argocd.192.168.56.11.sslip.io/
-		- 계정 정보
-			- ID: admin
-			- Password: admin1234
-	1-1. Choose Your Connection Method > 'VIA HTTPS' 선택
-	1-2. Project > 'default' 선택
-	1-3. GitOps Address(Repository URL) > https://github.com/{{Github Username}}/sample-gitops.git
-		- HTTPS 방식으로 연결 시 Github ID와 AccessToken이 필요
-	1-4. Username > Github Username
-	1-5. Password > Git AccessToken(환경 구축 중 발급받은 Token 사용 가능)
+  - 접속 주소
+    - https://argocd.192.168.56.11.sslip.io/
+    - 계정 정보
+      - ID: admin
+      - Password: admin1234
+  1-1. Choose Your Connection Method > 'VIA HTTPS' 선택
+  1-2. Project > 'default' 선택
+  1-3. GitOps Address(Repository URL) > https://github.com/{{Github Username}}/sample-gitops.git
+    - HTTPS 방식으로 연결 시 Github ID와 AccessToken이 필요
+  1-4. Username > Github Username
+  1-5. Password > Git AccessToken(환경 구축 중 발급받은 Token 사용 가능)
 """
 
 """
 2. 배포를 위한 APP 등록
-	2-1. Application > 'New APP' 클릭
-	2-2. Application Name > 'sample-api' 입력
-	2-3. Project Name > 'default' 선택
-	2-4. Repository URL > 'https://github.com/{{Github Username}}/sample-gitops.git' 선택
-	2-5. Revision > 'main' 입력
-	2-6. Path > 'sample-api/rolling-update-no-istio' 선택
-	2-7. Cluster URL > 'https://kubernetes.default.svc' 선택
-	2-8. Namespace > 'api' 입력
-		- 맨 아래 부분에는 Kustomize를 통해 기 입력된 항목들이 조회된다.
-	2-9. Create 후 Refresh, SYNC 버튼을 한 번씩 클릭
-		- gitops의 내용들이 클러스터에 Deploy 된다.
+  2-1. Application > 'New APP' 클릭
+  2-2. Application Name > 'sample-api' 입력
+  2-3. Project Name > 'default' 선택
+  2-4. Repository URL > 'https://github.com/{{Github Username}}/sample-gitops.git' 선택
+  2-5. Revision > 'main' 입력
+  2-6. Path > 'sample-api/rolling-update-no-istio' 선택
+  2-7. Cluster URL > 'https://kubernetes.default.svc' 선택
+  2-8. Namespace > 'api' 입력
+    - 맨 아래 부분에는 Kustomize를 통해 기 입력된 항목들이 조회된다.
+  2-9. Create 후 Refresh, SYNC 버튼을 한 번씩 클릭
+    - gitops의 내용들이 클러스터에 Deploy 된다.
 """
 
 """
 3. 애플리케이션의 버전을 올린 뒤 tag의 버전을 수정
-	- 버전을 올리기 위해 소스 코드를 수정한다.
+  - 버전을 올리기 위해 소스 코드를 수정한다.
 """
 git add ./*;git commit -m "version up";git push
 git tag 0.0.2;git push
