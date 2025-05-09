@@ -218,7 +218,7 @@ def opsBranch = "main"
 /////////////////////////////
 pipeline {
     environment {
-		  PATH = "$PATH:/usr/local/bin/"  //maven, skaffold, argocd,jq path
+      PATH = "$PATH:/usr/local/bin/"  //maven, skaffold, argocd,jq path
     }
     agent any
     stages {
@@ -247,8 +247,8 @@ pipeline {
 
         stage('GitOps update') {
             steps {
-	              print "======kustomization.yaml tag update====="
-	              withCredentials([
+                print "======kustomization.yaml tag update====="
+                withCredentials([
                   gitUsernamePassword(credentialsId: 'git-credential', gitToolName: 'Default')
                 ]) {
                   sh """
